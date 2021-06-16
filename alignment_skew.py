@@ -47,20 +47,3 @@ def alignment(image_path):
         warped = np.zeros((100, 50))
 
     return run, image, warped
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
