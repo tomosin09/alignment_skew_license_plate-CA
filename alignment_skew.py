@@ -11,7 +11,8 @@ def alignment(image_path):
     if image is None:
         print('Image is empty')
         run = False
-    gray_frame = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gamma = ImageConversion.gammaCorrection(image, 1.3)
+    gray_frame = cv2.cvtColor(gamma, cv2.COLOR_BGR2GRAY)
     thresh = ImageConversion.convToThresh(gray_frame)
     sobel = ImageConversion.confToSobel(thresh)
     contours = ImageConversion.getOutlines(sobel)
@@ -42,6 +43,8 @@ def alignment(image_path):
         for i in range(len(approx_list)):
             approx_math[i] = approx_list[i]
         warped = PointConversion.fourPointAlignment(image, approx_math)
+        # warped = ImageConversion.changeBC(warped, alpha=1.3, beta=40)
+        # warped = ImageConversion.gammaCorrection(warped, 1.3)
 
     if not run:
         warped = np.zeros((100, 50))

@@ -5,6 +5,19 @@ import numpy as np
 class ImageConversion():
 
     @staticmethod
+    def changeBC(frame, alpha=1, beta=0):
+        new_image = np.zeros(frame.shape, frame.dtype)
+        # Initialize values
+        return cv2.convertScaleAbs(frame, alpha=alpha, beta=beta)
+
+    @staticmethod
+    def gammaCorrection(frame, gamma=1):
+        lookUpTable = np.empty((1, 256), np.uint8)
+        for i in range(256):
+            lookUpTable[0, i] = np.clip(pow(i / 255.0, gamma) * 255.0, 0, 255)
+        return cv2.LUT(frame, lookUpTable)
+
+    @staticmethod
     def convToThresh(frame):
         blur = cv2.GaussianBlur(frame, (3, 3), cv2.BORDER_DEFAULT)
         emission_value = np.nanmean(blur) + np.nanstd(blur)
