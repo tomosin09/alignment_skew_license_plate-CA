@@ -1,6 +1,8 @@
 import argparse
 import matplotlib.pyplot as plt
 from alignment_skew import alignment
+from loguru import logger
+import time
 
 
 def visualize(images, titles):
@@ -15,13 +17,16 @@ def visualize(images, titles):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='alignment of license plate skew using contour analysis')
-    parser.add_argument('frame_path',
-                        type=str,
+    parser.add_argument('--frame_path',
                         help='enter frame path')
     args = parser.parse_args()
+    start = time.time()
     run, image, warped = alignment(args.frame_path)
     if not run:
-        print('failed to convert image, try more')
+        logger.error('failed to convert image, try more')
+        sys.exit(-1)
+    logger.info(f'the number was corrected in {round(time.time()-start,4)}')
     images = [image, warped]
     titles = ['original', 'warped']
     visualize(images, titles)
+
