@@ -19,7 +19,8 @@ class ImageConversion():
 
     @staticmethod
     def convToThresh(frame):
-        blur = cv2.GaussianBlur(frame, (3, 3), cv2.BORDER_DEFAULT)
+        opening = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)
+        blur = cv2.GaussianBlur(opening, (3, 3), cv2.BORDER_DEFAULT)
         emission_value = np.nanmean(blur) + np.nanstd(blur)
         return cv2.threshold(blur, emission_value, 255, cv2.THRESH_BINARY)[1]
 
