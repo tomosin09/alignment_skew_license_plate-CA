@@ -19,6 +19,7 @@ class ImageConversion():
 
     @staticmethod
     def convToThresh(frame):
+        kernel = np.ones((5, 5), np.uint8)
         opening = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)
         blur = cv2.GaussianBlur(opening, (3, 3), cv2.BORDER_DEFAULT)
         emission_value = np.nanmean(blur) + np.nanstd(blur)

@@ -1,14 +1,21 @@
 import argparse
+import os
+
 import matplotlib.pyplot as plt
 from alignment_skew import alignment
 from loguru import logger
 import time
+import sys
 
 
 def visualize(images, titles):
-    l = len(images)
-    for i in range(l):
-        plt.subplot(1, l, i + 1);
+    column = len(images)
+    row = 1
+    if len(images) > 3:
+        column = 3
+        row = column % 3
+    for i in range(len(images)):
+        plt.subplot(row, column, i + 1);
         plt.imshow(images[i])
         plt.title(titles[i])
         plt.xticks([]), plt.yticks([])
@@ -21,12 +28,14 @@ if __name__ == '__main__':
                         help='enter frame path')
     args = parser.parse_args()
     start = time.time()
-    run, image, warped = alignment(args.frame_path)
+    run, image, thresh, warped = alignment(args.frame_path)
     if not run:
         logger.error('failed to convert image, try more')
         sys.exit(-1)
-    logger.info(f'the number was corrected in {round(time.time()-start,4)}')
-    images = [image, warped]
-    titles = ['original', 'warped']
+    logger.info(f'the number was corrected in {round(time.time() - start, 4)}')
+    images = [image, thresh, warped]
+    titles = ['original', 'thresh', 'warped']
     visualize(images, titles)
+
+
 

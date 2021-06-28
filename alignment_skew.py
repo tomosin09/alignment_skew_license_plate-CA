@@ -7,7 +7,7 @@ from image_processing import ImageConversion
 def alignment(image_path):
     run = True
     checkRect = True
-    image = cv2.imread(image_path)
+    image = cv2.imread(image_path, 1)
     if image is None:
         print('Image is empty')
         run = False
@@ -43,10 +43,10 @@ def alignment(image_path):
         for i in range(len(approx_list)):
             approx_math[i] = approx_list[i]
         warped = PointConversion.fourPointAlignment(image, approx_math)
-        # warped = ImageConversion.changeBC(warped, alpha=1.3, beta=40)
-        # warped = ImageConversion.gammaCorrection(warped, 1.3)
+        warped = ImageConversion.changeBC(warped, alpha=1.3, beta=40)
+        warped = ImageConversion.gammaCorrection(warped, 1.3)
 
     if not run:
         warped = np.zeros((100, 50))
 
-    return run, image, warped
+    return run, image, thresh, warped
